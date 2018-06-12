@@ -15,7 +15,7 @@ import info.jsjackson.domain.Category;
  * @author jsjackson
  *
  */
-@Ignore //XXX set-up needs fixing 
+@Ignore //XXX failing - needs fixing 
 public class CategoryMapperTest {
 
 	CategoryMapper categoryMapper = CategoryMapper.INSTANCE;
