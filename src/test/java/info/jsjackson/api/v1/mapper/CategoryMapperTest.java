@@ -3,9 +3,8 @@
  */
 package info.jsjackson.api.v1.mapper;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import info.jsjackson.api.v1.model.CategoryDTO;
@@ -15,14 +14,12 @@ import info.jsjackson.domain.Category;
  * @author jsjackson
  *
  */
-@Ignore //XXX failing - needs fixing 
 public class CategoryMapperTest {
 
 	CategoryMapper categoryMapper = CategoryMapper.INSTANCE;
 	
 	public static final long ID = 1L;
 	public static final String NAME = "Joe";
-	
 	
 	@Test
 	public void testCategoryToCategoryDTO() {
