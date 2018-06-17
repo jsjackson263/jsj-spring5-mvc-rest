@@ -7,7 +7,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import info.jsjackson.domain.Category;
+import info.jsjackson.domain.Customer;
 import info.jsjackson.repositories.CategoryRepository;
+import info.jsjackson.repositories.CustomerRepository;
 
 /**
  * @author jsjackson
@@ -20,16 +22,31 @@ import info.jsjackson.repositories.CategoryRepository;
 public class Bootstrap implements CommandLineRunner {
 	
 	private final CategoryRepository categoryRepository;
+	private final CustomerRepository customerRepository;
 
 	
-	public Bootstrap(CategoryRepository categoryRepository) {
+	/**
+	 * @param categoryRepository
+	 * @param customerRepository
+	 */
+	public Bootstrap(CategoryRepository categoryRepository, CustomerRepository customerRepository) {
 		this.categoryRepository = categoryRepository;
+		this.customerRepository = customerRepository;
 	}
 
 
 	@Override
 	public void run(String... args) throws Exception {
 
+		loadCategories();
+		loadCustomers();
+		
+		
+	}
+	
+	
+	private void loadCategories() {
+		
 		Category fruits = new Category();
 		fruits.setName("Fruits");
 		
@@ -51,9 +68,34 @@ public class Bootstrap implements CommandLineRunner {
 		categoryRepository.save(exotic);
 		categoryRepository.save(nuts);
 		
-		System.out.println("Data Loaded = " + categoryRepository.count());
-		
+		System.out.println("Category Data Loaded = " + categoryRepository.count());
 	}
+	
+	private void loadCustomers() {
+		
+		Customer customer = new Customer();
+		customer.setFirstName("John");
+		customer.setLastName("Lennon");
+		customerRepository.save(customer);
+		
+		customer = new Customer();
+		customer.setFirstName("Paul");
+		customer.setLastName("Mcartney");
+		customerRepository.save(customer);
+		
+		customer = new Customer();
+		customer.setFirstName("George");
+		customer.setLastName("Harrison");
+		customerRepository.save(customer);
+		
+		customer = new Customer();
+		customer.setFirstName("Ringo");
+		customer.setLastName("Starr");
+		customerRepository.save(customer);
+		
+		System.out.println("Customer Data Loaded = " + customerRepository.count());
+	}
+	
 	
 
 }
