@@ -9,6 +9,7 @@ import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -89,6 +90,14 @@ public class CategoryServiceTest {
 		//Then
 		assertEquals(NAME1, categoryDTO.getName());
 		
+	
+	}
+	
+	@Test
+	public void test() throws Exception {
+		
+		Random random = new Random();
+		random.ints().limit(10).forEach(System.out::println);
 	
 	}
 
