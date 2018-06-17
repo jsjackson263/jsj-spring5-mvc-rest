@@ -17,7 +17,5 @@ import lombok.Data;
 public class CategoryListDTO {
 	
 	List<CategoryDTO> categories;
-	
-	
 
 }
