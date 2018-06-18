@@ -4,7 +4,6 @@
 package info.jsjackson.services;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,12 +75,29 @@ public class CustomerServiceImpl implements CustomerService {
 
 		Customer customer = customerMapper.customerDtoToCustomer(customerDTO);
 		
-		Customer savedCustomer = customerRepositpory.save(customer);
+		return saveAndReturnDTO(customer);
 		
+	}
+	
+	private CustomerDTO saveAndReturnDTO(Customer customer) {
+		
+		Customer savedCustomer = customerRepositpory.save(customer);
 		CustomerDTO returnDTO = customerMapper.customerToCustomerDTO(savedCustomer);
-		returnDTO.setCustomerUrl("/api/v1/customer/" + customer.getId());
+		
+		returnDTO.setCustomerUrl("/api/v1/customer/" + savedCustomer.getId());
 		
 		return returnDTO;
+		
+	}
+
+	@Override
+	public CustomerDTO saveCustomerByDTO(Long id, CustomerDTO customerDTO) {
+
+		Customer customer = customerMapper.customerDtoToCustomer(customerDTO);
+		customer.setId(id);
+		
+		return saveAndReturnDTO(customer);
+		
 	}
 
 

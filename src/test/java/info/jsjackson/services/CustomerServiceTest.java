@@ -3,14 +3,14 @@
  */
 package info.jsjackson.services;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
-import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -19,7 +19,6 @@ import org.mockito.MockitoAnnotations;
 
 import info.jsjackson.api.v1.mapper.CustomerMapper;
 import info.jsjackson.api.v1.model.CustomerDTO;
-import info.jsjackson.domain.Category;
 import info.jsjackson.domain.Customer;
 import info.jsjackson.repositories.CustomerRepository;
 
@@ -160,4 +159,33 @@ public class CustomerServiceTest {
 		
 	}
 
+	@Test
+	public void testSaveCustomerByDTO() throws Exception {
+		
+		//Given
+		CustomerDTO customerDTO = new CustomerDTO();
+		customerDTO.setId(ID3);
+		customerDTO.setFirstName(FIRST_NAME3);
+		customerDTO.setLastName(LAST_NAME3);
+		
+		Customer savedCustomer = new Customer();
+		savedCustomer.setId(customerDTO.getId());
+		savedCustomer.setFirstName(customerDTO.getFirstName());
+		savedCustomer.setLastName(customerDTO.getLastName());
+		
+		
+		when(customerRepository.save(any(Customer.class))).thenReturn(savedCustomer);
+		
+		//When
+		CustomerDTO savedDTO = customerService.saveCustomerByDTO(ID3, customerDTO);
+		
+		//Then
+		assertEquals(Long.valueOf(ID3), savedDTO.getId());
+		assertEquals(FIRST_NAME3, savedDTO.getFirstName());
+		assertEquals(LAST_NAME3, savedDTO.getLastName());
+		assertEquals("/api/v1/customer/3", savedDTO.getCustomerUrl());
+		
+	}
+
+	
 }

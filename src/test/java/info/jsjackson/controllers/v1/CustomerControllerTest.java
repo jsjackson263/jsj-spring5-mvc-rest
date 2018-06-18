@@ -3,14 +3,15 @@
  */
 package info.jsjackson.controllers.v1;
 
-import static org.hamcrest.CoreMatchers.any;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -27,7 +28,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import info.jsjackson.api.v1.model.CustomerDTO;
-import info.jsjackson.domain.Customer;
 import info.jsjackson.services.CustomerService;
 
 /**
@@ -206,5 +206,35 @@ public class CustomerControllerTest extends AbstractRestControllerTest {
 		
 	}
 	
+	@Test
+	public void testUpdateCustomer() throws Exception {
+
+		//Given
+		CustomerDTO customerDTO = new CustomerDTO();
+		customerDTO.setId(ID3);
+		customerDTO.setFirstName(FIRST_NAME3);
+		customerDTO.setLastName(LAST_NAME3);
+		customerDTO.setCustomerUrl(CUSTOMER_URL3);
+		
+		CustomerDTO returnDTO = new CustomerDTO();
+		returnDTO.setId(customerDTO.getId());
+		returnDTO.setFirstName(customerDTO.getFirstName());
+		returnDTO.setLastName(customerDTO.getLastName());
+		returnDTO.setCustomerUrl(customerDTO.getCustomerUrl());
+		
+		
+		when(customerService.saveCustomerByDTO(anyLong(),  any(CustomerDTO.class))).thenReturn(returnDTO);
+		
+		//When/Then
+		mockMvc.perform(put("/api/v1/customers/3")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(asJsonString(customerDTO)))
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("$.firstName", equalTo(FIRST_NAME3)))
+		.andExpect(jsonPath("$.lastName", equalTo(LAST_NAME3)))
+		.andExpect(jsonPath("$.customer_url", equalTo(CUSTOMER_URL3)))
+		.andReturn();
+				
+	}
 
 }
