@@ -10,10 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import info.jsjackson.api.v1.model.CategoryDTO;
-import info.jsjackson.api.v1.model.CategoryListDTO;
 import info.jsjackson.api.v1.model.CustomerDTO;
 import info.jsjackson.api.v1.model.CustomerListDTO;
 import info.jsjackson.services.CustomerService;
@@ -23,7 +23,7 @@ import info.jsjackson.services.CustomerService;
  *
  */
 @Controller
-@RequestMapping("/api/v1/customers/")
+@RequestMapping("/api/v1/customers")
 public class CustomerController {
 
 	private final CustomerService customerService;
@@ -43,7 +43,7 @@ public class CustomerController {
 	}
 	
 	
-	@GetMapping("{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<CustomerDTO> getCustomerById(@PathVariable String id) {
 		
 		CustomerDTO customerDTO = customerService.getCustomerById(Long.valueOf(id));
@@ -52,7 +52,7 @@ public class CustomerController {
 		
 	}
 	
-	@GetMapping("customer/{lastName}")
+	@GetMapping("/customer/{lastName}")
 	public ResponseEntity<CustomerDTO> getCustomerByLastName(@PathVariable String lastName) {
 		
 		CustomerDTO customerDTO = customerService.getCustomerByLastName(lastName);
@@ -60,5 +60,18 @@ public class CustomerController {
 		return new ResponseEntity<CustomerDTO>(customerDTO, HttpStatus.OK);
 		
 	}
+	
+	@PostMapping
+	public ResponseEntity<CustomerDTO> createNewCustomer(@RequestBody CustomerDTO customerDTO) {
+		/* @RequestBody:
+		 * - causes the object to  be bound automatically
+		 * - tells SpringMVC to look at the body of the request, parse it, & create a DTO out of it */
+		
+		CustomerDTO retunDTO = customerService.createNewCustomer(customerDTO);
+		
+		return new ResponseEntity<CustomerDTO>(retunDTO, HttpStatus.CREATED);
+		
+	}
+	
 	
 }
