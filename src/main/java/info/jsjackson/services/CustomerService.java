@@ -25,5 +25,6 @@ public interface CustomerService {
 	
 	CustomerDTO patchCustomer(Long id, CustomerDTO customerDTO);
 	
+	void deleteCustomerById(Long id);
 	
 }

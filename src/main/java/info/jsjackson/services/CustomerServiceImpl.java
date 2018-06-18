@@ -123,5 +123,11 @@ public class CustomerServiceImpl implements CustomerService {
 	
 	}
 
+	@Override
+	public void deleteCustomerById(Long id) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }
