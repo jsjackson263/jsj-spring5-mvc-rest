@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import info.jsjackson.api.v1.mapper.CustomerMapper;
@@ -21,19 +22,20 @@ import info.jsjackson.repositories.CustomerRepository;
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
-	CustomerMapper customerMapper;
-	CustomerRepository customerRepositpory;
+	private CustomerMapper customerMapper;
+	private CustomerRepository customerRepositpory;
 	
-	
-	/**
-	 * @param customerMapper
-	 * @param customerRepositpory
-	 */
-	public CustomerServiceImpl(CustomerMapper customerMapper, CustomerRepository customerRepositpory) {
+
+	@Autowired
+	public void setCustomerMapper(CustomerMapper customerMapper) {
 		this.customerMapper = customerMapper;
+	}
+	
+	@Autowired
+	public void setCustomerRepository(CustomerRepository customerRepositpory) {
 		this.customerRepositpory = customerRepositpory;
 	}
-
+	
 	
 	@Override
 	public List<CustomerDTO> getAllCustomers() {
@@ -64,8 +66,22 @@ public class CustomerServiceImpl implements CustomerService {
 		
 		Customer customer = customerRepositpory.findByLastName(lastName);
 		CustomerDTO customerDTO = customerMapper.customerToCustomerDTO(customer);
+		 customerDTO.setCustomerUrl("/api/v1/customer/" + customer.getId());
 		
 		return customerDTO;
+	}
+
+	@Override
+	public CustomerDTO createNewCustomer(CustomerDTO customerDTO) {
+
+		Customer customer = customerMapper.customerDtoToCustomer(customerDTO);
+		
+		Customer savedCustomer = customerRepositpory.save(customer);
+		
+		CustomerDTO returnDTO = customerMapper.customerToCustomerDTO(savedCustomer);
+		returnDTO.setCustomerUrl("/api/v1/customer/" + customer.getId());
+		
+		return returnDTO;
 	}
 
 

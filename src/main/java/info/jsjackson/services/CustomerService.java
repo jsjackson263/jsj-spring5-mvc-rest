@@ -19,5 +19,7 @@ public interface CustomerService {
 	
 	CustomerDTO getCustomerByLastName(String lastName);
 	
+	CustomerDTO createNewCustomer(CustomerDTO customerDTO);
+	
 	
 }

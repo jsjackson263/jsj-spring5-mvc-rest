@@ -37,18 +37,27 @@ public class CustomerServiceTest {
 	public static final String FIRST_NAME2 = "Jane";
 	public static final String LAST_NAME2 = "Doe";
 	
+	public static final long ID3 = 3L;
+	public static final String FIRST_NAME3 = "Steve";
+	public static final String LAST_NAME3 = "Hawking";
 	
-	CustomerService customerService;
+	
+	CustomerServiceImpl customerService;
+	
 	
 	@Mock
 	CustomerRepository customerRepository;
 	
+	CustomerMapper customerMapper = CustomerMapper.INSTANCE;
 	
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
 		
-		customerService = new CustomerServiceImpl(CustomerMapper.INSTANCE, customerRepository);
+		customerService = new CustomerServiceImpl();
+		customerService.setCustomerMapper(customerMapper);
+		customerService.setCustomerRepository(customerRepository);
+		
 	}
 
 	
@@ -120,6 +129,34 @@ public class CustomerServiceTest {
 		assertEquals(Long.valueOf(ID1), customerDTO.getId());
 		assertEquals(FIRST_NAME1, customerDTO.getFirstName());
 		assertEquals(LAST_NAME1, customerDTO.getLastName());
+		
+	}
+	
+	@Test
+	public void testCreateNewCustomer() throws Exception {
+		
+		//Given
+		CustomerDTO customerDTO = new CustomerDTO();
+		customerDTO.setId(ID3);
+		customerDTO.setFirstName(FIRST_NAME3);
+		customerDTO.setLastName(LAST_NAME3);
+		
+		Customer savedCustomer = new Customer();
+		savedCustomer.setId(customerDTO.getId());
+		savedCustomer.setFirstName(customerDTO.getFirstName());
+		savedCustomer.setLastName(customerDTO.getLastName());
+		
+		
+		when(customerRepository.save(any(Customer.class))).thenReturn(savedCustomer);
+		
+		//When
+		CustomerDTO savedDTO = customerService.createNewCustomer(customerDTO);
+		
+		//Then
+		assertEquals(Long.valueOf(ID3), savedDTO.getId());
+		assertEquals(FIRST_NAME3, savedDTO.getFirstName());
+		assertEquals(LAST_NAME3, savedDTO.getLastName());
+		assertEquals("/api/v1/customer/3", savedDTO.getCustomerUrl());
 		
 	}
 
