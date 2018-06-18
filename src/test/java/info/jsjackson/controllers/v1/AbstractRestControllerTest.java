@@ -11,6 +11,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class AbstractRestControllerTest {
 
+	/*
+	 * a helper method to convert an object to a json string
+	 */
 	public static String asJsonString(final Object object) {
 		
 		try {
