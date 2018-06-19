@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import info.jsjackson.api.v1.mapper.CustomerMapper;
 import info.jsjackson.api.v1.model.CustomerDTO;
+import info.jsjackson.controllers.v1.CustomerController;
 import info.jsjackson.domain.Customer;
 import info.jsjackson.repositories.CustomerRepository;
 
@@ -42,7 +43,7 @@ public class CustomerServiceImpl implements CustomerService {
 				.stream()
 				.map(customer -> {
 					CustomerDTO customerDTO = customerMapper.customerToCustomerDTO(customer);
-					customerDTO.setCustomerUrl("/api/v1/customer/" + customer.getId());
+					customerDTO.setCustomerUrl(getCustomerUrl(customer.getId()));
 					return customerDTO;
 				})
 				.collect(Collectors.toList());
@@ -65,7 +66,7 @@ public class CustomerServiceImpl implements CustomerService {
 		
 		Customer customer = customerRepositpory.findByLastName(lastName);
 		CustomerDTO customerDTO = customerMapper.customerToCustomerDTO(customer);
-		 customerDTO.setCustomerUrl("/api/v1/customer/" + customer.getId());
+		 customerDTO.setCustomerUrl(getCustomerUrl(customer.getId()));
 		
 		return customerDTO;
 	}
@@ -84,7 +85,7 @@ public class CustomerServiceImpl implements CustomerService {
 		Customer savedCustomer = customerRepositpory.save(customer);
 		CustomerDTO returnDTO = customerMapper.customerToCustomerDTO(savedCustomer);
 		
-		returnDTO.setCustomerUrl("/api/v1/customer/" + savedCustomer.getId());
+		returnDTO.setCustomerUrl(getCustomerUrl(savedCustomer.getId()));
 		
 		return returnDTO;
 		
@@ -115,7 +116,7 @@ public class CustomerServiceImpl implements CustomerService {
 				Customer savedCustomer = customerRepositpory.save(customer);
 				
 				CustomerDTO returnedDTO = customerMapper.customerToCustomerDTO(savedCustomer);
-				returnedDTO.setCustomerUrl("/api/v1/customer/" + savedCustomer.getId());
+				returnedDTO.setCustomerUrl(getCustomerUrl(id));
 				
 				return returnedDTO;
 					
@@ -123,9 +124,18 @@ public class CustomerServiceImpl implements CustomerService {
 	
 	}
 
+	
+	private String getCustomerUrl(Long id) {
+		return CustomerController.BASE_URL + "/" + id;
+	}
+	
+	
 	@Override
 	public void deleteCustomerById(Long id) {
-		// TODO Auto-generated method stub
+		/* needs error-handling: either
+		 * 1. check if exists, then delete, or
+		 * 2. just delete. if it's not there, return some code */
+		customerRepositpory.deleteById(id);  
 		
 	}
 

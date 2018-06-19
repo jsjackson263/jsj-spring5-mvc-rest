@@ -7,6 +7,8 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -19,6 +21,7 @@ import org.mockito.MockitoAnnotations;
 
 import info.jsjackson.api.v1.mapper.CustomerMapper;
 import info.jsjackson.api.v1.model.CustomerDTO;
+import info.jsjackson.controllers.v1.CustomerController;
 import info.jsjackson.domain.Customer;
 import info.jsjackson.repositories.CustomerRepository;
 
@@ -155,7 +158,7 @@ public class CustomerServiceTest {
 		assertEquals(Long.valueOf(ID3), savedDTO.getId());
 		assertEquals(FIRST_NAME3, savedDTO.getFirstName());
 		assertEquals(LAST_NAME3, savedDTO.getLastName());
-		assertEquals("/api/v1/customer/3", savedDTO.getCustomerUrl());
+		assertEquals(CustomerController.BASE_URL + "/3", savedDTO.getCustomerUrl());
 		
 	}
 
@@ -183,7 +186,20 @@ public class CustomerServiceTest {
 		assertEquals(Long.valueOf(ID3), savedDTO.getId());
 		assertEquals(FIRST_NAME3, savedDTO.getFirstName());
 		assertEquals(LAST_NAME3, savedDTO.getLastName());
-		assertEquals("/api/v1/customer/3", savedDTO.getCustomerUrl());
+		assertEquals(CustomerController.BASE_URL + "/3", savedDTO.getCustomerUrl());
+		
+	}
+	
+	@Test
+	public void testDeleteCustomerById() throws Exception {
+		
+		Long idToDelete = Long.valueOf(1L);
+		
+		//When
+		customerRepository.deleteById(idToDelete);
+		
+		//Then
+		verify(customerRepository, times(1)).deleteById(anyLong());
 		
 	}
 

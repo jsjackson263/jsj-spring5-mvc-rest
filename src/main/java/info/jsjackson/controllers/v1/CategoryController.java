@@ -19,11 +19,17 @@ import info.jsjackson.services.CategoryService;
 /**
  * @author jsjackson
  *
+ * alternatively externalize the API url value this way: @RequestMapping("${some.url.value}") 
+ * - but would need to bring up the SpringContext to get this value
+ * - test would have to change from Unit tests to Integration tests
  */
 @Controller
-@RequestMapping("/api/v1/categories/")
+
+@RequestMapping(CategoryController.BASE_URL)
 public class CategoryController {
 
+	public static final String BASE_URL = "/api/v1/categories";
+	
 	private final CategoryService categoryService;
 
 	public CategoryController(CategoryService categoryService) {
