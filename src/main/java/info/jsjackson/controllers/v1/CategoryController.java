@@ -11,6 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import info.jsjackson.api.v1.model.CategoryDTO;
 import info.jsjackson.api.v1.model.CategoryListDTO;
@@ -22,8 +24,10 @@ import info.jsjackson.services.CategoryService;
  * alternatively externalize the API url value this way: @RequestMapping("${some.url.value}") 
  * - but would need to bring up the SpringContext to get this value
  * - test would have to change from Unit tests to Integration tests
+ * 
+ * @RestController annotation -> @Controller + @ResponseBody
  */
-@Controller
+@RestController
 
 @RequestMapping(CategoryController.BASE_URL)
 public class CategoryController {
@@ -38,21 +42,22 @@ public class CategoryController {
 
 	
 	@GetMapping
-	public ResponseEntity<CategoryListDTO> getAllCategories() {
+	@ResponseStatus(HttpStatus.OK)
+	public CategoryListDTO getAllCategories() {
 		
 		List<CategoryDTO> categoryList = categoryService.getAllCategories();
-		CategoryListDTO categoryListDTO = new CategoryListDTO(categoryList);
 		
-		return new ResponseEntity<CategoryListDTO>(categoryListDTO, HttpStatus.OK);
+		return new CategoryListDTO(categoryList);
 		
 	}
 	
 	@GetMapping("{name}")
-	public ResponseEntity<CategoryDTO> getCategoryByName(@PathVariable String name) {
+	@ResponseStatus(HttpStatus.OK)
+	public CategoryDTO getCategoryByName(@PathVariable String name) {
 		
 		CategoryDTO categoryDTO = categoryService.getCategoryByName(name);
 		
-		return new ResponseEntity<CategoryDTO>(categoryDTO, HttpStatus.OK);
+		return categoryDTO;
 		
 	}
 	

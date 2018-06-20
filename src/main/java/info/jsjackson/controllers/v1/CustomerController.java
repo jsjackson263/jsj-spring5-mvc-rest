@@ -23,6 +23,8 @@ import info.jsjackson.services.CustomerService;
 
 /**
  * @author jsjackson
+ * 
+ * @Controller annotation - the old way of doing it
  *
  */
 @Controller
