@@ -57,7 +57,7 @@ public class CustomerServiceImpl implements CustomerService {
 		//TODO: setCustomerUrl ???
 		return customerRepositpory.findById(id)
 				.map(customerMapper::customerToCustomerDTO)
-				.orElseThrow(RuntimeException::new); //TODO: implement better exception handling
+				.orElseThrow(ResourceNotFoundException::new); 
 		
 	}
 
@@ -120,7 +120,7 @@ public class CustomerServiceImpl implements CustomerService {
 				
 				return returnedDTO;
 					
-				}).orElseThrow(RuntimeException::new); //TODO: Implement better exception handling
+				}).orElseThrow(ResourceNotFoundException::new); 
 	
 	}
 
