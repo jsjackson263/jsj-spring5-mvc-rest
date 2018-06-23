@@ -1,2 +1,6 @@
 server:
   port: 10999
+  
+logging:
+  level:
+    root: DEBUG
