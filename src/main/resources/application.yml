@@ -3,4 +3,6 @@ server:
   
 logging:
   level:
-    root: DEBUG
+    root: INFO
+    info.jsjackson.services: DEBUG
+    info.jsjackson.api.v1.mapper: DEBUG
