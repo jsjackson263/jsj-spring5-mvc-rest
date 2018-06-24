@@ -8,8 +8,10 @@ import org.springframework.stereotype.Component;
 
 import info.jsjackson.domain.Category;
 import info.jsjackson.domain.Customer;
+import info.jsjackson.domain.Vendor;
 import info.jsjackson.repositories.CategoryRepository;
 import info.jsjackson.repositories.CustomerRepository;
+import info.jsjackson.repositories.VendorRepository;
 
 /**
  * @author jsjackson
@@ -23,15 +25,19 @@ public class Bootstrap implements CommandLineRunner {
 	
 	private final CategoryRepository categoryRepository;
 	private final CustomerRepository customerRepository;
+	private final VendorRepository vendorRepository;
 
 	
 	/**
 	 * @param categoryRepository
 	 * @param customerRepository
 	 */
-	public Bootstrap(CategoryRepository categoryRepository, CustomerRepository customerRepository) {
+	public Bootstrap(CategoryRepository categoryRepository, 
+			CustomerRepository customerRepository,
+			VendorRepository vendorRepository) {
 		this.categoryRepository = categoryRepository;
 		this.customerRepository = customerRepository;
+		this.vendorRepository = vendorRepository;
 	}
 
 
@@ -40,7 +46,7 @@ public class Bootstrap implements CommandLineRunner {
 
 		loadCategories();
 		loadCustomers();
-		
+		loadVendors();
 		
 	}
 	
@@ -68,7 +74,7 @@ public class Bootstrap implements CommandLineRunner {
 		categoryRepository.save(exotic);
 		categoryRepository.save(nuts);
 		
-		System.out.println("Category Data Loaded = " + categoryRepository.count());
+		System.out.println("Categories Loaded = " + categoryRepository.count());
 	}
 	
 	private void loadCustomers() {
@@ -93,7 +99,20 @@ public class Bootstrap implements CommandLineRunner {
 		customer.setLastName("Starr");
 		customerRepository.save(customer);
 		
-		System.out.println("Customer Data Loaded = " + customerRepository.count());
+		System.out.println("Customers Loaded = " + customerRepository.count());
+	}
+	
+	private void loadVendors() {
+		
+		Vendor vendor1 = new Vendor();
+		vendor1.setName("Vendor 1");
+		vendorRepository.save(vendor1);
+		
+		Vendor vendor2 = new Vendor();
+		vendor2.setName("Vendor 2");
+		vendorRepository.save(vendor2);
+		
+		System.out.println("Vendors Loaded = " + vendorRepository.count());
 	}
 	
 	
