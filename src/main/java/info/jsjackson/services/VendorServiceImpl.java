@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import info.jsjackson.api.v1.mapper.VendorMapper;
 import info.jsjackson.api.v1.model.VendorDTO;
+import info.jsjackson.api.v1.model.VendorListDTO;
 import info.jsjackson.domain.Vendor;
 import info.jsjackson.repositories.VendorRepository;
 
@@ -34,9 +35,10 @@ public class VendorServiceImpl implements VendorService {
 	}
 
 	@Override
-	public List<VendorDTO> getAllVendors() {
+	public VendorListDTO getAllVendors() {
 		
-		return vendorRepository.findAll()
+		List<VendorDTO> vendorDTOs = 
+			vendorRepository.findAll()
 				.stream()
 				.map(vendor -> {
 					VendorDTO vendoDTO = vendorMapper.vendorToVendorDTO(vendor);
@@ -45,6 +47,8 @@ public class VendorServiceImpl implements VendorService {
 					return vendoDTO;
 				})
 				.collect(Collectors.toList());
+		
+		return new VendorListDTO(vendorDTOs);
 	}
 	
 
@@ -107,6 +111,7 @@ public class VendorServiceImpl implements VendorService {
 		
 		return vendorRepository.findById(id)
 				.map(vendor -> {
+					//TODO:if more properties, add more if statements
 					if (vendorDTO.getName() != null) {
 						vendor.setName(vendorDTO.getName());
 					}

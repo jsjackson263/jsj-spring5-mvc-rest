@@ -6,6 +6,7 @@ package info.jsjackson.services;
 import java.util.List;
 
 import info.jsjackson.api.v1.model.VendorDTO;
+import info.jsjackson.api.v1.model.VendorListDTO;
 
 /**
  * @author jsjackson
@@ -13,7 +14,7 @@ import info.jsjackson.api.v1.model.VendorDTO;
  */
 public interface VendorService {
 
-	List<VendorDTO> getAllVendors();
+	VendorListDTO getAllVendors();
 	
 	VendorDTO getVendorById(Long id);
 	

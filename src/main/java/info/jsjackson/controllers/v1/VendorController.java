@@ -44,9 +44,7 @@ public class VendorController {
 	@ResponseStatus(HttpStatus.OK)
 	public VendorListDTO getAllVendors() {
 		
-		List<VendorDTO>  vendorList = vendorService.getAllVendors();
-		
-		VendorListDTO vendorListDTO = new VendorListDTO(vendorList);
+		VendorListDTO  vendorListDTO = vendorService.getAllVendors();
 		
 		return vendorListDTO;
 		
