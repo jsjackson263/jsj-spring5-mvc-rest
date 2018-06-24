@@ -22,6 +22,7 @@ import info.jsjackson.bootstrap.Bootstrap;
 import info.jsjackson.domain.Customer;
 import info.jsjackson.repositories.CategoryRepository;
 import info.jsjackson.repositories.CustomerRepository;
+import info.jsjackson.repositories.VendorRepository;
 
 /**
  * @author jsjackson
@@ -37,6 +38,9 @@ public class CustomerServiceImplT {
 	@Autowired
 	CategoryRepository categoryRepository;
 	
+	@Autowired
+	VendorRepository vendorRepository;
+	
 	CustomerServiceImpl customerService;
 	
 	
@@ -46,7 +50,7 @@ public class CustomerServiceImplT {
 		System.out.println(customerRepository.findAll().size());
 
 		//setup data for testing
-		Bootstrap bootstrap = new Bootstrap(categoryRepository, customerRepository);
+		Bootstrap bootstrap = new Bootstrap(categoryRepository, customerRepository, vendorRepository);
 		bootstrap.run();  //load data
 		
 		customerService  = new CustomerServiceImpl(); 

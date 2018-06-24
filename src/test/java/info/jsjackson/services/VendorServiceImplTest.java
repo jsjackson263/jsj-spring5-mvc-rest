@@ -3,15 +3,18 @@
  */
 package info.jsjackson.services;
 
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.BDDMockito.given;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +27,7 @@ import org.mockito.MockitoAnnotations;
 
 import info.jsjackson.api.v1.mapper.VendorMapper;
 import info.jsjackson.api.v1.model.VendorDTO;
+import info.jsjackson.api.v1.model.VendorListDTO;
 import info.jsjackson.domain.Vendor;
 import info.jsjackson.repositories.VendorRepository;
 
@@ -74,19 +78,20 @@ public class VendorServiceImplTest {
 		vendor5.setId(ID5);
 		vendor5.setName(NAME5);
 		vendorList.add(vendor5);
-
-		when(vendorRepository.findAll()).thenReturn(vendorList);
+		
+		given(vendorRepository.findAll()).willReturn(vendorList);
 
 		// When
-		List<VendorDTO> returnedVendorList = vendorService.getAllVendors();
+		VendorListDTO vendorListDTO = vendorService.getAllVendors();
 
 		// Then
-		assertNotNull(returnedVendorList);
-		assertEquals(2, returnedVendorList.size());
-		assertEquals(NAME5, returnedVendorList.get(1).getName());
-		assertEquals(URL3, returnedVendorList.get(0).getVendorUrl());
+		assertNotNull(vendorListDTO);
+		//New type of JUnit assertion that uses Hamcrest matchers
+		assertThat(vendorListDTO.getVendors().size(), is(equalTo(2)));
+		assertThat(vendorListDTO.getVendors().get(1).getName(), is(equalTo(NAME5)));
+		assertThat(vendorListDTO.getVendors().get(0).getVendorUrl(), is(equalTo(URL3)));
 
-		String vendorString = returnedVendorList.get(0).toString();
+		String vendorString = vendorListDTO.getVendors().get(0).toString();
 		assertTrue(vendorString.contains("Tutti"));
 
 	}
@@ -99,18 +104,38 @@ public class VendorServiceImplTest {
 		vendor.setId(ID3);
 		vendor.setName(NAME3);
 
-		Optional<Vendor> vendorOptional = Optional.of(vendor);
-		when(vendorRepository.findById(anyLong())).thenReturn(vendorOptional);
+		given(vendorRepository.findById(anyLong())).willReturn(Optional.of(vendor));
 
 		// When
 		VendorDTO returnedVendorDTO = vendorService.getVendorById(ID3);
 
 		// Then
 		assertNotNull(returnedVendorDTO);
-		assertEquals(ID3, returnedVendorDTO.getId());
-		assertEquals(NAME3, returnedVendorDTO.getName());
+		assertThat(returnedVendorDTO.getId(), is(equalTo(ID3)));
+		assertThat(returnedVendorDTO.getName(), is(equalTo(NAME3)));
 
 	}
+	
+	@Test(expected = ResourceNotFoundException.class)
+	public void testGetVendorByIdNotFound() throws Exception {
+
+		// Given
+		Vendor vendor = new Vendor();
+		vendor.setId(ID3);
+		vendor.setName(NAME3);
+
+		given(vendorRepository.findById(anyLong())).willReturn(Optional.empty());
+
+		// When
+		VendorDTO returnedVendorDTO = vendorService.getVendorById(ID3);
+
+		// Then
+		assertNotNull(returnedVendorDTO);
+		assertThat(returnedVendorDTO.getId(), is(equalTo(ID3)));
+		assertThat(returnedVendorDTO.getName(), is(equalTo(NAME3)));
+
+	}
+	
 
 	@Test
 	public void testGetVendorByName() throws Exception {
@@ -120,15 +145,15 @@ public class VendorServiceImplTest {
 		vendor.setId(ID5);
 		vendor.setName(NAME5);
 
-		when(vendorRepository.findByName(anyString())).thenReturn(vendor);
+		given(vendorRepository.findByName(anyString())).willReturn(vendor);
 
 		// When
 		VendorDTO returnedVendorDTO = vendorService.getVendorByName(NAME5);
 
 		// Then
 		assertNotNull(returnedVendorDTO);
-		assertEquals(ID5, returnedVendorDTO.getId());
-		assertEquals(NAME5, returnedVendorDTO.getName());
+		assertThat(returnedVendorDTO.getId(), is(equalTo(ID5)));
+		assertThat(returnedVendorDTO.getName(), is(equalTo(NAME5)));
 
 	}
 
@@ -136,7 +161,7 @@ public class VendorServiceImplTest {
 	public void testGetVendorByNameNotFound() throws Exception {
 
 		// Given
-		when(vendorRepository.findByName(anyString())).thenReturn(null);
+		given(vendorRepository.findByName(anyString())).willReturn(null);
 
 		// When
 		VendorDTO returnedVendorDTO = vendorService.getVendorByName(NAME5);
@@ -161,15 +186,15 @@ public class VendorServiceImplTest {
 		savedVendor.setId(vendorDTO.getId());
 		savedVendor.setName(vendorDTO.getName());
 
-		when(vendorRepository.save(any(Vendor.class))).thenReturn(savedVendor);
+		given(vendorRepository.save(any(Vendor.class))).willReturn(savedVendor);
 
 		// When
 		VendorDTO savedDTO = vendorService.createNewVendor(vendorDTO);
 
 		// Then
-		assertEquals(ID1, savedDTO.getId());
-		assertEquals(NAME1, savedDTO.getName());
-		assertEquals(URL1, savedDTO.getVendorUrl());
+		assertThat(savedDTO.getId(), is(equalTo(ID1)));
+		assertThat(savedDTO.getName(), is(equalTo(NAME1)));
+		assertThat(savedDTO.getVendorUrl(), containsString("1"));
 
 	}
 
@@ -186,15 +211,15 @@ public class VendorServiceImplTest {
 		savedVendor.setId(vendorDTO.getId());
 		savedVendor.setName(vendorDTO.getName());
 
-		when(vendorRepository.save(any(Vendor.class))).thenReturn(savedVendor);
+		given(vendorRepository.save(any(Vendor.class))).willReturn(savedVendor);
 
 		// When
 		VendorDTO returnedDTO = vendorService.saveVendorByDTO(ID1, vendorDTO);
 
 		// Then
 		assertNotNull(returnedDTO);
-		assertEquals(ID1, returnedDTO.getId());
-		assertEquals(NAME1, returnedDTO.getName());
+		assertThat(returnedDTO.getId(), is(equalTo(ID1)));
+		assertThat(returnedDTO.getName(), is(equalTo(NAME1)));
 
 	}
 

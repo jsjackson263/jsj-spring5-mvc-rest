@@ -31,6 +31,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import info.jsjackson.api.v1.model.VendorDTO;
+import info.jsjackson.api.v1.model.VendorListDTO;
 import info.jsjackson.services.VendorService;
 
 /**
@@ -86,7 +87,9 @@ public class VendorControllerTest extends AbstractRestControllerTest {
 		vendorDTO2.setVendorUrl(URL2);
 		vendorList.add(vendorDTO2);
 		
-		when(vendorService.getAllVendors()).thenReturn(vendorList);
+		VendorListDTO vendorListDTO = new VendorListDTO(vendorList);
+				
+		when(vendorService.getAllVendors()).thenReturn(vendorListDTO);
 
 		
 		//When/Then
