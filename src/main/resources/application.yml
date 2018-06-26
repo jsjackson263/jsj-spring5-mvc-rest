@@ -6,3 +6,17 @@ logging:
     root: INFO
     info.jsjackson.services: DEBUG
     info.jsjackson.api.v1.mapper: DEBUG
+    
+#info:
+#  build:
+#    artifact: @project.artifactId@
+#    name: @project.name@
+#    description: @project.description@
+#    version: @project.version@ 
+    
+    
+#prettify the json output
+spring:
+  jackson:
+    serialization:
+      indent-output: true
