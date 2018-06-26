@@ -26,8 +26,9 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class SwaggerConfig  { //extends WebMvcConfigurationSupport {
 
-	@Value("${info.build.version}")
-	private String versionNumber;
+	//TODO: Fix the version configuration - use version in pom.xml
+	//@Value("${info.build.version}")
+	//private String versionNumber;
 	
 	
 	@Bean
@@ -52,7 +53,8 @@ public class SwaggerConfig  { //extends WebMvcConfigurationSupport {
 		ApiInfo apiMeta = new ApiInfoBuilder()
 	            .title("Spring Boot Swagger Example API")
 	            .description( "An example Spring Boot Integration with Swagger")
-	            .version(versionNumber)
+	           // .version(versionNumber)
+	            .version("1.0")
 	            .license("Terms of Service")
 	            .licenseUrl("https://www.apache.org/licenses/")
 	            .contact(contact)
