@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import info.jsjackson.api.v1.model.CustomerDTO;
 import info.jsjackson.api.v1.model.CustomerListDTO;
 import info.jsjackson.services.CustomerService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 /**
  * @author jsjackson
@@ -27,6 +29,7 @@ import info.jsjackson.services.CustomerService;
  * @Controller annotation - the old way of doing it
  *
  */
+@Api(description = "This is my Customer Controller")
 @Controller
 @RequestMapping(CustomerController.BASE_URL)
 public class CustomerController {
@@ -40,6 +43,7 @@ public class CustomerController {
 	}
 	
 	
+	@ApiOperation(value = "This will get a list of customers", notes = "These are some notes about the Api")
 	@GetMapping
 	public ResponseEntity<CustomerListDTO> getAllCustomers() {
 		
